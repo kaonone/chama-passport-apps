@@ -1,5 +1,5 @@
-var CounterApp = artifacts.require('CounterApp.sol')
+var PassportApp = artifacts.require('PassportApp.sol')
 
 module.exports = function (deployer) {
-  deployer.deploy(CounterApp)
+  deployer.deploy(PassportApp)
 }

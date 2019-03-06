@@ -1,6 +1,6 @@
 {
-  "name": "Counter",
-  "description": "An application for Aragon",
+  "name": "Passport",
+  "description": "An identity application for Chama project based on Aragon",
   "icons": [{
     "src": "images/icon.png",
     "sizes": "22x22"

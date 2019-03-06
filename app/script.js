@@ -11,10 +11,11 @@ app.store(async (state, event) => {
   if (state === null) state = initialState
 
   switch (event.event) {
-    case 'Increment':
-      return { count: await getValue() }
-    case 'Decrement':
-      return { count: await getValue() }
+    case 'Registration':
+      return {
+        count: await getValue(),
+        identity: await getMyIdentity()
+      }
     default:
       return state
   }
@@ -27,6 +28,16 @@ function getValue() {
       .call('value')
       .first()
       .map(value => parseInt(value, 10))
+      .subscribe(resolve)
+  })
+}
+
+function getMyIdentity() {
+  return new Promise(resolve => {
+    app
+      .call('getMyIdentity')
+      .first()
+      // .map(value => parseInt(value, 10))
       .subscribe(resolve)
   })
 }

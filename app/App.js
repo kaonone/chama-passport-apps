@@ -20,19 +20,30 @@ export default class App extends React.Component {
     return (
       <AppContainer>
         <div>
-          <ObservedCount observable={this.props.observable} />
-          <Button onClick={() => this.props.app.decrement(1)}>Decrement</Button>
-          <Button onClick={() => this.props.app.increment(1)}>Increment</Button>
-          <Button onClick={() => this.props.app.childDeploy()}>Deploy</Button>
+          {/* <ObservedCount observable={this.props.observable} /> */}
+          <ObservedIdentity observable={this.props.observable} />
+          <Button onClick={() => this.props.app.register(42, "Foo", "Boo")}>Registration</Button>
         </div>
       </AppContainer>
     )
   }
 }
 
-const ObservedCount = observe(
+// const ObservedCount = observe(
+//   (state$) => state$,
+//   { count: 0 }
+// )(
+//   ({ count }) => <Text.Block style={{ textAlign: 'center' }} size='xxlarge'>{count}</Text.Block>
+// )
+
+const ObservedIdentity = observe(
   (state$) => state$,
-  { count: 0 }
+  { count: 0, identity: 0 }
 )(
-  ({ count }) => <Text.Block style={{ textAlign: 'center' }} size='xxlarge'>{count}</Text.Block>
+  ({ count, identity }) => {
+    return [
+      <Text.Block style={{ textAlign: 'center' }} size='xxlarge'>{count}</Text.Block>,
+      <Text.Block style={{ textAlign: 'center' }} size='xxlarge'>{identity}</Text.Block>
+    ];
+  }
 )

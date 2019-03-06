@@ -7,8 +7,7 @@ const path = require('path')
 const HDWalletProvider = require('truffle-hdwallet-provider')
 const HDWalletProviderPrivkey = require('truffle-hdwallet-provider-privkey')
 
-// const DEFAULT_MNEMONIC = 'explain tackle mirror kit van hammer degree position ginger unfair soup bonus'
-const DEFAULT_MNEMONIC = 'cabin upgrade shove flock feel exotic load spy remind song boss improve'
+const DEFAULT_MNEMONIC = 'explain tackle mirror kit van hammer degree position ginger unfair soup bonus'
 
 const defaultRPC = (network) =>
   `https://${network}.infura.io`
@@ -47,16 +46,12 @@ const providerForNetwork = (network) => (
 )
 module.exports = {
   networks: {
-    // development: {
-    //   host: 'localhost',
-    //   port: 7545,
-    //   network_id: '*'
-    // },
     development: {
       host: 'localhost',
       port: 8545,
-      network_id: '*'
-      // network_id: 5777
+      network_id: 5777,
+      // port: 7545,
+      // network_id: '*'
     },
     mainnet: {
       network_id: 1,
