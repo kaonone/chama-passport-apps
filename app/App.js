@@ -38,12 +38,20 @@ export default class App extends React.Component {
 
 const ObservedIdentity = observe(
   (state$) => state$,
-  { count: 0, identity: 0 }
+  { count: 0, identity: null }
 )(
   ({ count, identity }) => {
+    console.log('>> identity', identity);
     return [
-      <Text.Block style={{ textAlign: 'center' }} size='xxlarge'>{count}</Text.Block>,
-      <Text.Block style={{ textAlign: 'center' }} size='xxlarge'>{identity}</Text.Block>
+      <Text.Block style={{ textAlign: 'center' }} size='xxlarge'>Count: {count}</Text.Block>,
+      identity
+        ? (<React.Fragment>
+          <Text.Block style={{ textAlign: 'center' }} size='xxlarge'>Age: {identity.age}</Text.Block>
+          <Text.Block style={{ textAlign: 'center' }} size='xxlarge'>First name: {identity.firstName}</Text.Block>
+          <Text.Block style={{ textAlign: 'center' }} size='xxlarge'>Last name: {identity.lastName}</Text.Block>
+        </React.Fragment>)
+        : <Text.Block style={{ textAlign: 'center' }} size='xxlarge'>Identity is not found</Text.Block>
+      
     ];
   }
 )
