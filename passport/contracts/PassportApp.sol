@@ -2,14 +2,12 @@ pragma solidity ^0.4.24;
 
 import "@aragon/os/contracts/apps/AragonApp.sol";
 import "@aragon/os/contracts/lib/math/SafeMath.sol";
+import "../../common/contracts/IPassport.sol";
 
-contract PassportApp is AragonApp {
+contract PassportApp is AragonApp, IPassport {
     using SafeMath for uint256;
 
     /// Events
-    // event Increment(address indexed entity, uint256 step);
-    // event Decrement(address indexed entity, uint256 step);
-    // event Registration(address indexed entity, uint256 step);
     event Registration(address indexed entity, uint step);
 
     struct Identity {
@@ -23,9 +21,6 @@ contract PassportApp is AragonApp {
     // OPT: https://gist.github.com/axic/ce82bdd1763c04ef8138c2b905985dab
     mapping (address => Identity) identities;
     address[] public members;
-
-    // TODO: TEMP: remove me
-    uint256 public value;
 
 
     /// ACL
@@ -50,7 +45,6 @@ contract PassportApp is AragonApp {
 
         members.push(msg.sender);
 
-        value = value.add(something);
         emit Registration(msg.sender, something);
     }
 

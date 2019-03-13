@@ -21,6 +21,7 @@ import "@aragon/apps-token-manager/contracts/TokenManager.sol";
 import "@aragon/apps-shared-minime/contracts/MiniMeToken.sol";
 
 import "./ChamaApp.sol";
+import "../../common/contracts/IPassport.sol";
 
 
 contract KitBase is APMNamehash {
@@ -68,21 +69,23 @@ contract Kit is KitBase {
 
         address root = msg.sender;
         bytes32 appId = apmNamehash("chama");
+        bytes32 idAppId = apmNamehash("passport");
         bytes32 votingAppId = apmNamehash("voting");
         bytes32 tokenManagerAppId = apmNamehash("token-manager");
 
         ChamaApp app = ChamaApp(dao.newAppInstance(appId, latestVersionAppBase(appId)));
-        // DAOCreater appFac = DAOCreater(dao.newAppInstance(appId, latestVersionAppBase(appId)));
+        IPassport passport = IPassport(dao.newAppInstance(idAppId, latestVersionAppBase(idAppId)));
         Voting voting = Voting(dao.newAppInstance(votingAppId, latestVersionAppBase(votingAppId)));
         TokenManager tokenManager = TokenManager(dao.newAppInstance(tokenManagerAppId, latestVersionAppBase(tokenManagerAppId)));
 
         MiniMeToken token = tokenFactory.createCloneToken(MiniMeToken(0), 0, "App token", 0, "APP", true);
         token.changeController(tokenManager);
 
-        app.initialize();
 
-        tokenManager.initialize(token, true, 0);
         // Initialize apps
+        app.initialize();
+        passport.initialize(/* TODO: root passport address */);
+        tokenManager.initialize(token, true, 0);
         voting.initialize(token, 50 * PCT, 20 * PCT, 1 days);
 
         acl.createPermission(this, tokenManager, tokenManager.MINT_ROLE(), this);
@@ -90,8 +93,9 @@ contract Kit is KitBase {
 
         acl.createPermission(ANY_ENTITY, voting, voting.CREATE_VOTES_ROLE(), root);
 
-        acl.createPermission(voting, app, app.INCREMENT_ROLE(), voting);
-        acl.createPermission(ANY_ENTITY, app, app.DECREMENT_ROLE(), root);
+        // acl.createPermission(voting, passport, passport.INCREMENT_ROLE(), voting);
+        // acl.createPermission(voting, app, app.INCREMENT_ROLE(), voting);
+        // acl.createPermission(ANY_ENTITY, app, app.DECREMENT_ROLE(), root);
         acl.grantPermission(voting, tokenManager, tokenManager.MINT_ROLE());
 
         // acl.createPermission(ANY_ENTITY, appFac, appFac.CREATE_DAO_ROLE(), root);

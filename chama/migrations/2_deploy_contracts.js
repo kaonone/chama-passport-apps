@@ -1,5 +1,5 @@
-var PassportApp = artifacts.require('PassportApp.sol')
+var ChamaApp = artifacts.require('ChamaApp.sol')
 
 module.exports = function (deployer) {
-  deployer.deploy(PassportApp)
+  deployer.deploy(ChamaApp)
 }

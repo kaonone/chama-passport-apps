@@ -1,5 +1,5 @@
-const CounterApp = artifacts.require('PassportApp.sol')
+const CounterApp = artifacts.require('ChamaApp.sol')
 
-contract('PassportApp', (accounts) => {
+contract('ChamaApp', (accounts) => {
   it('should be tested')
 })
