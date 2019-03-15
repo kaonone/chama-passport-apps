@@ -79,7 +79,8 @@ contract PassportApp is AragonApp, IPassport {
     // function createDAO(uint256 ens, uint256 id) external auth(CREATE_DAO_ROLE) {
     function createDAO() external {
 
-        address DAO = 0x21bdbdCF1d4aF6651F633E487b3cf329992a04F2;
+        // It should be the Chama Kit address:
+        address Kit = 0x21bdbdCF1d4aF6651F633E487b3cf329992a04F2;
 
         // (iid, fname, lname) = getIdentity(msg.sender);
         // if (iid == 0) {
@@ -87,8 +88,8 @@ contract PassportApp is AragonApp, IPassport {
         // }
 
         // address kit =
-        IChamaKit kit = IChamaKit(DAO);
-        kit.newInstance();
+        IChamaKit kit = IChamaKit(Kit);
+        kit.newInstance(this, msg.sender);
         // kit.newInstance(msg.sender, id);
 
         // emit Deploy(msg.sender, id);
