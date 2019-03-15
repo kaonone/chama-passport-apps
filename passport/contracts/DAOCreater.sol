@@ -5,6 +5,7 @@ import "@aragon/os/contracts/lib/math/SafeMath.sol";
 import "@aragon/os/contracts/apm/APMNamehash.sol";
 import "../../common/contracts/IChamaKit.sol";
 
+
 contract DAOCreater is AragonApp, APMNamehash {
     using SafeMath for uint256;
 
@@ -21,17 +22,17 @@ contract DAOCreater is AragonApp, APMNamehash {
     bytes32 constant public CREATE_DAO_ROLE = keccak256("CREATE_DAO_ROLE");
 
 
-    function initialize() onlyInit public {
+    function initialize() public onlyInit {
         initialized();
     }
 
 
     // function createDAO(ENS ens, uint256 id) auth(CREATE_DAO_ROLE) external {
-    function createDAO(uint256 ens, uint256 id) auth(CREATE_DAO_ROLE) external {
-        // Kit kit = Kit(ens);
+    function createDAO(uint256 ens, uint256 id) external auth(CREATE_DAO_ROLE) {
         // TODO: FIXME:
-        IChamaKit kit = IChamaKit(dao.newAppInstance(CHAMA_KIT_ID, latestVersionAppBase(CHAMA_KIT_ID)));
-        kit.newInstance(msg.sender, id);
+        // address kit =
+        // IChamaKit kit = IChamaKit(dao.newAppInstance(CHAMA_KIT_ID, latestVersionAppBase(CHAMA_KIT_ID)));
+        // kit.newInstance(msg.sender, id);
 
         emit Deploy(msg.sender, id);
     }

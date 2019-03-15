@@ -8,5 +8,6 @@ import "./IPassport.sol";
 
 
 interface IChamaKit {
-	function newInstance(address owner, IPassport id) external;
+    // function newInstance(address owner, IPassport id) external;
+    function newInstance() external;
 }

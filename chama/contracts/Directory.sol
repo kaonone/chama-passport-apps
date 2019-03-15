@@ -2,10 +2,8 @@ pragma solidity ^0.4.24;
 
 import "@aragon/os/contracts/apps/AragonApp.sol";
 import "@aragon/os/contracts/lib/math/SafeMath.sol";
-import "../../common/contracts/IPassport.sol";
-import "../../common/contracts/IChamaKit.sol";
 
-contract PassportApp is AragonApp, IPassport {
+contract Directory is AragonApp {
     using SafeMath for uint256;
 
     /// Events
@@ -27,7 +25,7 @@ contract PassportApp is AragonApp, IPassport {
     /// ACL
     bytes32 constant public REGISTER_IDENTITY_ROLE = keccak256("REGISTER_IDENTITY_ROLE");
 
-    function initialize() onlyInit public {
+    function initialize() public onlyInit {
         initialized();
     }
 
@@ -36,7 +34,7 @@ contract PassportApp is AragonApp, IPassport {
      * @notice Register new Identity for caller with `something`
      * @param something Amount of something
      */
-    function register(uint something, string fname, string lname) auth(REGISTER_IDENTITY_ROLE) external {
+    function register(uint something, string fname, string lname) external auth(REGISTER_IDENTITY_ROLE) {
         // TODO: break if msg.sender is already existing in identities.
 
         var identity = identities[msg.sender];
@@ -68,29 +66,5 @@ contract PassportApp is AragonApp, IPassport {
 
     function getMyIdentity() view public returns (uint, string, string) {
         return (identities[msg.sender].age, identities[msg.sender].fName, identities[msg.sender].lName);
-    }
-
-
-    // TEMP: XXX:
-    // ENS: 0x5f6f7e8cc7346a11ca2def8f827b7a0b612c56a1
-    // DAO: 0x21bdbdCF1d4aF6651F633E487b3cf329992a04F2
-
-
-    // function createDAO(uint256 ens, uint256 id) external auth(CREATE_DAO_ROLE) {
-    function createDAO() external {
-
-        address DAO = 0x21bdbdCF1d4aF6651F633E487b3cf329992a04F2;
-
-        // (iid, fname, lname) = getIdentity(msg.sender);
-        // if (iid == 0) {
-        //     throw "Does not have ID!";
-        // }
-
-        // address kit =
-        IChamaKit kit = IChamaKit(DAO);
-        kit.newInstance();
-        // kit.newInstance(msg.sender, id);
-
-        // emit Deploy(msg.sender, id);
     }
 }

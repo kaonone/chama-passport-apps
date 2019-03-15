@@ -23,6 +23,7 @@ export default class App extends React.Component {
           {/* <ObservedCount observable={this.props.observable} /> */}
           <ObservedIdentity observable={this.props.observable} />
           <Button onClick={() => this.props.app.register(42, "Foo", "Boo")}>Registration</Button>
+          <Button onClick={() => this.props.app.createDAO(42, "Foo")}>Create DAO!</Button>
         </div>
       </AppContainer>
     )
@@ -51,7 +52,7 @@ const ObservedIdentity = observe(
           <Text.Block style={{ textAlign: 'center' }} size='xxlarge'>Last name: {identity.lastName}</Text.Block>
         </React.Fragment>)
         : <Text.Block style={{ textAlign: 'center' }} size='xxlarge'>Identity is not found</Text.Block>
-      
+
     ];
   }
 )

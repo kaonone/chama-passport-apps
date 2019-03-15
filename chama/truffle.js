@@ -50,7 +50,7 @@ module.exports = {
       host: 'localhost',
       port: 8545,
       network_id: 5777,
-      // port: 7545,
+      // gas: 6.9e6,
       // network_id: '*'
     },
     mainnet: {

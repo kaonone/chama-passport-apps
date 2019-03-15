@@ -14,14 +14,19 @@ import "@aragon/os/contracts/factory/DAOFactory.sol";
 import "@aragon/os/contracts/apm/Repo.sol";
 import "@aragon/os/contracts/lib/ens/ENS.sol";
 import "@aragon/os/contracts/lib/ens/PublicResolver.sol";
+
 import "@aragon/os/contracts/apm/APMNamehash.sol";
 
 import "@aragon/apps-voting/contracts/Voting.sol";
 import "@aragon/apps-token-manager/contracts/TokenManager.sol";
 import "@aragon/apps-shared-minime/contracts/MiniMeToken.sol";
 
+// import "@aragon/apps-vault/contracts/?.sol";
+// import "@aragon/apps-finance/contracts/?.sol";
+
 import "./ChamaApp.sol";
 import "../../common/contracts/IPassport.sol";
+import "../../common/contracts/IChamaKit.sol";
 
 
 contract KitBase is APMNamehash {
@@ -52,7 +57,7 @@ contract KitBase is APMNamehash {
 }
 
 
-contract Kit is KitBase {
+contract Kit is KitBase, IChamaKit {
     MiniMeTokenFactory tokenFactory;
 
     uint64 constant PCT = 10 ** 16;
@@ -80,6 +85,8 @@ contract Kit is KitBase {
 
         MiniMeToken token = tokenFactory.createCloneToken(MiniMeToken(0), 0, "App token", 0, "APP", true);
         token.changeController(tokenManager);
+
+        // TODO: vault
 
 
         // Initialize apps
