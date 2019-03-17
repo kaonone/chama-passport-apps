@@ -16,6 +16,7 @@ import "@aragon/os/contracts/lib/ens/ENS.sol";
 import "@aragon/os/contracts/lib/ens/PublicResolver.sol";
 
 import "@aragon/os/contracts/apm/APMNamehash.sol";
+// import "@aragon/os/contracts/kernel/KernelConstants.sol";
 
 import "@aragon/apps-voting/contracts/Voting.sol";
 import "@aragon/apps-token-manager/contracts/TokenManager.sol";
@@ -65,6 +66,11 @@ contract Kit is KitBase, IChamaKit {
 
     function Kit(ENS ens) KitBase(DAOFactory(0), ens) {
         tokenFactory = new MiniMeTokenFactory();
+
+        // register kit (self) in the factory
+        // bytes32 facAppId = apmNamehash("chama-factory");
+        // IPassport factory = IPassport(dao.newAppInstance(facAppId, latestVersionAppBase(facAppId)));
+        // factory.registerKit(this);
     }
 
     function newInstance() {
@@ -79,7 +85,15 @@ contract Kit is KitBase, IChamaKit {
         bytes32 tokenManagerAppId = apmNamehash("token-manager");
 
         ChamaApp app = ChamaApp(dao.newAppInstance(appId, latestVersionAppBase(appId)));
+
+        // address passportAddr = address(0x990268D34C896A220d6173662DeB802041252dF5);
         IPassport passport = IPassport(dao.newAppInstance(idAppId, latestVersionAppBase(idAppId)));
+        // ERCProxy appProxy = ERCProxy(passportAddr);
+        // IPassport passport = IPassport(passportAddr);
+        // dao.setApp(dao.APP_ADDR_NAMESPACE(), idAppId, ERCProxy(passportAddr));
+        // IPassport passport = IPassport(dao.setApp(dao.APP_ADDR_NAMESPACE(), idAppId, passportAddr));
+        // passport.registerChama(/* TODO: root passport address */);
+
         Voting voting = Voting(dao.newAppInstance(votingAppId, latestVersionAppBase(votingAppId)));
         TokenManager tokenManager = TokenManager(dao.newAppInstance(tokenManagerAppId, latestVersionAppBase(tokenManagerAppId)));
 
@@ -100,9 +114,11 @@ contract Kit is KitBase, IChamaKit {
 
         acl.createPermission(ANY_ENTITY, voting, voting.CREATE_VOTES_ROLE(), root);
 
-        // acl.createPermission(voting, passport, passport.INCREMENT_ROLE(), voting);
-        // acl.createPermission(voting, app, app.INCREMENT_ROLE(), voting);
-        // acl.createPermission(ANY_ENTITY, app, app.DECREMENT_ROLE(), root);
+        // acl.createPermission(voting, passport, passport.REGISTER_IDENTITY_ROLE(), voting);
+        acl.createPermission(voting, passport, keccak256("REGISTER_IDENTITY_ROLE"), voting);
+        // acl.createPermission(ANY_ENTITY, IPassport(passportAddr), IPassport(passportAddr).REGISTER_IDENTITY_ROLE(), root);
+        // acl.createPermission(ANY_ENTITY, passport, keccak256("REGISTER_IDENTITY_ROLE"), root);
+
         acl.grantPermission(voting, tokenManager, tokenManager.MINT_ROLE());
 
         // acl.createPermission(ANY_ENTITY, appFac, appFac.CREATE_DAO_ROLE(), root);
@@ -116,6 +132,8 @@ contract Kit is KitBase, IChamaKit {
         acl.grantPermission(root, acl, acl.CREATE_PERMISSIONS_ROLE());
         acl.revokePermission(this, acl, acl.CREATE_PERMISSIONS_ROLE());
         acl.setPermissionManager(root, acl, acl.CREATE_PERMISSIONS_ROLE());
+
+        // address me = address(this);
 
         DeployInstance(dao);
     }

@@ -5,6 +5,9 @@ import "@aragon/os/contracts/lib/math/SafeMath.sol";
 import "@aragon/os/contracts/apm/APMNamehash.sol";
 import "../../common/contracts/IChamaKit.sol";
 
+import "@aragon/os/contracts/lib/ens/ENS.sol";
+import {Kit as ChamaKit} from "../../chama/contracts/Kit.sol";
+
 
 contract DAOCreater is AragonApp, APMNamehash {
     using SafeMath for uint256;
@@ -13,13 +16,13 @@ contract DAOCreater is AragonApp, APMNamehash {
     event Deploy(address indexed entity, uint256 id);
 
     /* Hardcoded constants to save gas */
-    // TODO: impl:
+    // TODO: re-impl & use:
     // bytes32 internal constant CHAMA_REGISTRY_APP_ID = apmNamehash("chamareg");
     // bytes32 internal constant CHAMA_KIT_ID = apmNamehash("chamakit");
 
     /// State
     address public kit;
-    address ens;
+    ENS public ens;
 
     /// ACL
     bytes32 constant public CREATE_DAO_ROLE = keccak256("CREATE_DAO_ROLE");
@@ -30,7 +33,7 @@ contract DAOCreater is AragonApp, APMNamehash {
         initialized();
     }
 
-    function initialize(address _ens) onlyInit public {
+    function initialize(ENS _ens) onlyInit public {
         ens = _ens;
         initialize();
     }
@@ -46,12 +49,15 @@ contract DAOCreater is AragonApp, APMNamehash {
         // IChamaKit kit = IChamaKit(dao.newAppInstance(CHAMA_KIT_ID, latestVersionAppBase(CHAMA_KIT_ID)));
         // kit.newInstance(msg.sender, id);
 
-        if (kit == 0) {
-            // kit = new Kit(ens);
-        }
+        // ChamaKit chakit;
+        // if (kit == 0) {
+        //     chakit = new ChamaKit(ens);
+        // } else {
+        //     chakit = ChamaKit(kit);
+        // }
+        // /* var dao = */ chakit.newInstance();
 
-        // var dao = kit.newInstance();
-        // address(dao)
         emit Deploy(msg.sender, id);
+        // emit Deploy(address(dao), id);
     }
 }

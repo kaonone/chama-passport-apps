@@ -21,10 +21,8 @@ import "@aragon/apps-token-manager/contracts/TokenManager.sol";
 import "@aragon/apps-shared-minime/contracts/MiniMeToken.sol";
 
 import "./DAOCreater.sol";
-import "./PassportApp.sol";
-import "../../common/contracts/IPassport.sol";
-
-import {Kit as ChamaKit} from "../../chama/contracts/Kit.sol";
+// import "../../common/contracts/IPassport.sol";
+// import {Kit as ChamaKit} from "../../chama/contracts/Kit.sol";
 
 
 contract KitBase is APMNamehash {
@@ -56,12 +54,15 @@ contract KitBase is APMNamehash {
 
 
 contract Kit is KitBase {
-    // MiniMeTokenFactory tokenFactory;
+    MiniMeTokenFactory tokenFactory;
 
     uint64 constant PCT = 10 ** 16;
     address constant ANY_ENTITY = address(-1);
 
+    // address public passport;
+
     function Kit(ENS ens) KitBase(DAOFactory(0), ens) {
+        /* , address passport */
         // tokenFactory = new MiniMeTokenFactory();
     }
 
@@ -71,25 +72,30 @@ contract Kit is KitBase {
         acl.createPermission(this, dao, dao.APP_MANAGER_ROLE(), this);
 
         address root = msg.sender;
-        bytes32 passportId = apmNamehash("passport");
+        // bytes32 passportId = apmNamehash("passport");
         bytes32 factoryId = apmNamehash("chama-factory");
         // bytes32 votingAppId = apmNamehash("voting");
 
-        PassportApp passport = PassportApp(dao.newAppInstance(passportId, latestVersionAppBase(passportId)));
-        // DAOCreater factory = DAOCreater(dao.newAppInstance(factoryId, latestVersionAppBase(factoryId)));
+        // PassportApp passport = PassportApp(dao.newAppInstance(passportId, latestVersionAppBase(passportId)));
+        DAOCreater factory = DAOCreater(dao.newAppInstance(factoryId, latestVersionAppBase(factoryId)));
         // Voting voting = Voting(dao.newAppInstance(votingAppId, latestVersionAppBase(votingAppId)));
 
-        // init apps:
-        passport.initialize(IPassport(0), dao);
-        // factory.initialize(ens);
+        // init kit:
+        // ChamaKit kit = new ChamaKit(ens);
 
-        acl.createPermission(ANY_ENTITY, passport, passport.REGISTER_IDENTITY_ROLE(), acl);
-        // acl.createPermission(ANY_ENTITY, factory, factory.CREATE_DAO_ROLE(), acl);
+        // init apps:
+        factory.initialize(ens);
+        // factory.initialize(address(kit));
+
+        acl.createPermission(ANY_ENTITY, factory, factory.SETUP_KIT_ROLE(), acl);
+        acl.createPermission(ANY_ENTITY, factory, factory.CREATE_DAO_ROLE(), acl);
 
         // Grant core permissions // TODO: review & fix me:
         // acl.grantPermission(voting, dao, dao.APP_MANAGER_ROLE());
-        // acl.grantPermission(voting, acl, acl.CREATE_PERMISSIONS_ROLE());
-        acl.grantPermission(passport, acl, acl.CREATE_PERMISSIONS_ROLE());
+
+        // acl.grantPermission(passport, acl, acl.CREATE_PERMISSIONS_ROLE());
+        // acl.grantPermission(acl, factory, factory.SETUP_KIT_ROLE());
+        // acl.grantPermission(acl, factory, factory.CREATE_DAO_ROLE());
 
         // Clean up permissions
         acl.grantPermission(root, dao, dao.APP_MANAGER_ROLE());

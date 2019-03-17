@@ -1,0 +1,33 @@
+{
+  "roles": [
+    {
+      "name": "Create new DAO",
+      "id": "CREATE_DAO_ROLE",
+      "params": []
+    },
+    {
+      "name": "Setup the DAO factory",
+      "id": "SETUP_KIT_ROLE",
+      "params": []
+    }
+  ],
+  "environments": {
+    "default": {
+      "network": "development",
+      "appName": "chama-factory.aragonpm.eth"
+    },
+    "staging": {
+      "registry": "0x98df287b6c145399aaa709692c8d308357bc085d",
+      "appName": "chama-factory.open.aragonpm.eth",
+      "wsRPC": "wss://rinkeby.eth.aragon.network/ws",
+      "network": "rinkeby"
+    },
+    "production": {
+      "registry": "0x314159265dd8dbb310642f98f50c066173c1259b",
+      "appName": "chama-factory.open.aragonpm.eth",
+      "wsRPC": "wss://mainnet.eth.aragon.network/ws",
+      "network": "mainnet"
+    }
+  },
+  "path": "contracts/DAOCreater.sol"
+}
